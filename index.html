@@ -1,0 +1,522 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NaijaVote — Blockchain E-Voting Prototype</title>
+    <link rel="stylesheet" href="naijavote.css" />
+    <script src="naijavote.js" defer></script>
+  </head>
+  <body>
+    <div class="nv-app">
+      <div class="nv-topbar">
+        <div class="nv-logo">
+          <svg viewBox="0 0 20 20">
+            <path d="M10 3l2 5h5l-4 3 1.5 5L10 13l-4.5 3L7 11 3 8h5z" />
+          </svg>
+        </div>
+        <div class="nv-brand">Naija<span>Vote</span></div>
+        <div class="nv-badge">Demo Mode</div>
+      </div>
+
+      <div class="nv-steps">
+        <div class="nv-step active" id="tab-reg" onclick="showTab('reg')">
+          <svg viewBox="0 0 20 20">
+            <circle cx="10" cy="7" r="3" />
+            <path d="M4 17c0-3.3 2.7-6 6-6s6 2.7 6 6" />
+          </svg>
+          Register
+        </div>
+        <div class="nv-step" id="tab-vote" onclick="showTab('vote')">
+          <svg viewBox="0 0 20 20">
+            <rect x="3" y="3" width="14" height="14" rx="2" />
+            <path d="M7 10l2 2 4-4" />
+          </svg>
+          Vote
+        </div>
+        <div class="nv-step" id="tab-ledger" onclick="showTab('ledger')">
+          <svg viewBox="0 0 20 20">
+            <rect x="3" y="3" width="14" height="14" rx="2" />
+            <path d="M7 7h6M7 10h6M7 13h4" />
+          </svg>
+          Blockchain
+        </div>
+        <div class="nv-step" id="tab-results" onclick="showTab('results')">
+          <svg viewBox="0 0 20 20"><path d="M4 14l4-4 3 3 5-6" /></svg>
+          Results
+        </div>
+        <div class="nv-step" id="tab-ai" onclick="showTab('ai')">
+          <svg viewBox="0 0 20 20">
+            <circle cx="10" cy="10" r="7" />
+            <path d="M10 7v3l2 2" />
+          </svg>
+          AI Assistant
+        </div>
+      </div>
+
+      <div class="nv-content">
+        <div id="sec-reg">
+          <div id="reg-alert" class="alert alert-info" style="display: none">
+            <svg viewBox="0 0 20 20">
+              <circle cx="10" cy="10" r="7" />
+              <path d="M10 9v5M10 7v.5" />
+            </svg>
+            <span id="reg-alert-text"></span>
+          </div>
+          <div class="card">
+            <div class="card-title">Voter registration</div>
+            <div class="card-sub">
+              Enter your details to register. Claude AI will verify your
+              identity in real time.
+            </div>
+            <div class="row2">
+              <div class="field">
+                <label>First name</label
+                ><input id="r-fname" type="text" placeholder="Amaka" />
+              </div>
+              <div class="field">
+                <label>Last name</label
+                ><input id="r-lname" type="text" placeholder="Okonkwo" />
+              </div>
+            </div>
+            <div class="row2">
+              <div class="field">
+                <label>NIN (National ID Number)</label
+                ><input
+                  id="r-nin"
+                  type="text"
+                  placeholder="12345678901"
+                  maxlength="11"
+                />
+              </div>
+              <div class="field">
+                <label>Date of birth</label><input id="r-dob" type="date" />
+              </div>
+            </div>
+            <div class="row2">
+              <div class="field">
+                <label>State of origin</label>
+                <select id="r-state">
+                  <option value="">Select state</option>
+                  <option>Abia</option>
+                  <option>Adamawa</option>
+                  <option>Akwa Ibom</option>
+                  <option>Anambra</option>
+                  <option>Bauchi</option>
+                  <option>Bayelsa</option>
+                  <option>Benue</option>
+                  <option>Borno</option>
+                  <option>Cross River</option>
+                  <option>Delta</option>
+                  <option>Ebonyi</option>
+                  <option>Edo</option>
+                  <option>Ekiti</option>
+                  <option>Enugu</option>
+                  <option>FCT</option>
+                  <option>Gombe</option>
+                  <option>Imo</option>
+                  <option>Jigawa</option>
+                  <option>Kaduna</option>
+                  <option>Kano</option>
+                  <option>Katsina</option>
+                  <option>Kebbi</option>
+                  <option>Kogi</option>
+                  <option>Kwara</option>
+                  <option>Lagos</option>
+                  <option>Nasarawa</option>
+                  <option>Niger</option>
+                  <option>Ogun</option>
+                  <option>Ondo</option>
+                  <option>Osun</option>
+                  <option>Oyo</option>
+                  <option>Plateau</option>
+                  <option>Rivers</option>
+                  <option>Sokoto</option>
+                  <option>Taraba</option>
+                  <option>Yobe</option>
+                  <option>Zamfara</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Phone number</label
+                ><input id="r-phone" type="tel" placeholder="08012345678" />
+              </div>
+            </div>
+            <button class="btn-green" onclick="registerVoter()">
+              Verify identity with Claude AI
+            </button>
+          </div>
+          <div id="reg-success" class="section-hidden">
+            <div class="alert alert-success">
+              <svg viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="7" />
+                <path d="M7 10l2 2 4-4" />
+              </svg>
+              <span
+                >Identity verified. Voter token generated. You may now proceed
+                to cast your vote.</span
+              >
+            </div>
+            <div
+              class="card"
+              style="display: flex; align-items: center; gap: 14px"
+            >
+              <div
+                style="
+                  width: 48px;
+                  height: 48px;
+                  border-radius: 50%;
+                  background: #eaf3de;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-weight: 500;
+                  font-size: 15px;
+                  color: #3b6d11;
+                  flex-shrink: 0;
+                "
+                id="voter-initials"
+              >
+                AO
+              </div>
+              <div>
+                <div
+                  style="font-size: 14px; font-weight: 500; color: #111"
+                  id="voter-name"
+                >
+                  Amaka Okonkwo
+                </div>
+                <div style="font-size: 12px; color: #666; margin-top: 2px">
+                  Voter ID:
+                  <span style="font-family: monospace" id="voter-id"
+                    >NV-2026-XXXX</span
+                  >
+                </div>
+                <div style="font-size: 12px; color: #666; margin-top: 1px">
+                  Token:
+                  <span
+                    style="font-family: monospace; color: #1d9e75"
+                    id="voter-token"
+                    >0x...</span
+                  >
+                </div>
+              </div>
+            </div>
+            <button class="btn-green" onclick="showTab('vote')">
+              Proceed to vote
+            </button>
+          </div>
+        </div>
+
+        <div id="sec-vote" class="section-hidden">
+          <div id="vote-locked" class="section-hidden">
+            <div class="alert alert-warn">
+              <svg viewBox="0 0 20 20">
+                <path d="M10 3l7 14H3z" />
+                <path d="M10 9v4M10 15v.5" />
+              </svg>
+              <span
+                >Please complete voter registration first before casting your
+                vote.</span
+              >
+            </div>
+          </div>
+          <div id="vote-main" class="section-hidden">
+            <div class="card">
+              <div class="card-title">Presidential election 2027</div>
+              <div class="card-sub">
+                Select one candidate. Your vote is anonymous and will be
+                recorded on the blockchain.
+              </div>
+              <div class="candidate-grid" id="candidates">
+                <div
+                  class="candidate"
+                  onclick="selectCandidate(this, 'Emeka Adeleke', 'PDP')"
+                  data-id="c1"
+                >
+                  <div class="ava" style="background: #e6f1fb; color: #185fa5">
+                    EA
+                  </div>
+                  <div class="cname">Emeka Adeleke</div>
+                  <div class="cparty">PDP</div>
+                  <div class="cpledge">
+                    Infrastructure, education & anti-corruption reform
+                  </div>
+                </div>
+                <div
+                  class="candidate"
+                  onclick="selectCandidate(this, 'Fatima Bello', 'APC')"
+                  data-id="c2"
+                >
+                  <div class="ava" style="background: #faeeda; color: #854f0b">
+                    FB
+                  </div>
+                  <div class="cname">Fatima Bello</div>
+                  <div class="cparty">APC</div>
+                  <div class="cpledge">
+                    Economic growth, security & power sector revival
+                  </div>
+                </div>
+                <div
+                  class="candidate"
+                  onclick="selectCandidate(this, 'Chukwudi Eze', 'LP')"
+                  data-id="c3"
+                >
+                  <div class="ava" style="background: #eaf3de; color: #3b6d11">
+                    CE
+                  </div>
+                  <div class="cname">Chukwudi Eze</div>
+                  <div class="cparty">LP</div>
+                  <div class="cpledge">
+                    Youth empowerment, tech & agricultural revival
+                  </div>
+                </div>
+                <div
+                  class="candidate"
+                  onclick="selectCandidate(this, 'Ngozi Okafor', 'NNPP')"
+                  data-id="c4"
+                >
+                  <div class="ava" style="background: #fbeaf0; color: #993556">
+                    NO
+                  </div>
+                  <div class="cname">Ngozi Okafor</div>
+                  <div class="cparty">NNPP</div>
+                  <div class="cpledge">
+                    Healthcare, women's rights & constitutional reform
+                  </div>
+                </div>
+              </div>
+              <div id="vote-confirm" class="section-hidden">
+                <div class="alert alert-info" style="margin-bottom: 12px">
+                  <svg viewBox="0 0 20 20">
+                    <circle cx="10" cy="10" r="7" />
+                    <path d="M10 9v5M10 7v.5" />
+                  </svg>
+                  <span
+                    >You selected: <strong id="selected-name"></strong>. This
+                    action is final and cannot be undone.</span
+                  >
+                </div>
+                <button class="btn-green" id="cast-btn" onclick="castVote()">
+                  Cast vote on blockchain
+                </button>
+              </div>
+            </div>
+          </div>
+          <div id="vote-done" class="section-hidden">
+            <div class="alert alert-success">
+              <svg viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="7" />
+                <path d="M7 10l2 2 4-4" />
+              </svg>
+              <span
+                >Your vote has been recorded on the blockchain. It is permanent
+                and cannot be altered.</span
+              >
+            </div>
+            <div class="card">
+              <div class="card-title">Vote receipt</div>
+              <div
+                style="
+                  font-size: 13px;
+                  display: flex;
+                  flex-direction: column;
+                  gap: 8px;
+                  margin-top: 8px;
+                "
+              >
+                <div style="display: flex; justify-content: space-between">
+                  <span style="color: #666">Transaction hash</span
+                  ><span
+                    style="font-family: monospace; font-size: 12px"
+                    id="tx-hash"
+                  ></span>
+                </div>
+                <div style="display: flex; justify-content: space-between">
+                  <span style="color: #666">Block number</span
+                  ><span id="block-num"></span>
+                </div>
+                <div style="display: flex; justify-content: space-between">
+                  <span style="color: #666">Timestamp</span
+                  ><span id="vote-time"></span>
+                </div>
+                <div style="display: flex; justify-content: space-between">
+                  <span style="color: #666">Status</span
+                  ><span class="badge-enc">Confirmed</span>
+                </div>
+              </div>
+            </div>
+            <button class="btn-green" onclick="showTab('ledger')">
+              View blockchain ledger
+            </button>
+          </div>
+        </div>
+
+        <div id="sec-ledger" class="section-hidden">
+          <div class="card">
+            <div class="card-title">Live blockchain ledger</div>
+            <div class="card-sub">
+              All votes are recorded as immutable transactions. No entry can be
+              modified or deleted.
+            </div>
+            <div class="ledger">
+              <div class="ledger-row ledger-head">
+                <div>Block</div>
+                <div>Transaction hash</div>
+                <div>Time</div>
+                <div>Status</div>
+              </div>
+              <div id="ledger-rows"></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Fraud monitoring — Claude AI</div>
+            <div class="card-sub">
+              Real-time anomaly detection across the voting platform.
+            </div>
+            <div id="fraud-list">
+              <div class="fraud-item">
+                <div
+                  class="fraud-icon"
+                  style="background: #eaf3de; color: #3b6d11"
+                >
+                  <svg viewBox="0 0 20 20">
+                    <path d="M10 3l7 4v4c0 3.5-3 6-7 7-4-1-7-3.5-7-7V7z" />
+                    <path d="M7 10l2 2 4-4" />
+                  </svg>
+                </div>
+                <div>
+                  <div style="font-size: 13px; font-weight: 500; color: #111">
+                    All voter IDs verified
+                  </div>
+                  <div style="font-size: 11px; color: #666; margin-top: 2px">
+                    0 duplicate registrations detected across all 36 states +
+                    FCT
+                  </div>
+                </div>
+              </div>
+              <div class="fraud-item">
+                <div
+                  class="fraud-icon"
+                  style="background: #eaf3de; color: #3b6d11"
+                >
+                  <svg viewBox="0 0 20 20">
+                    <path d="M10 3l7 4v4c0 3.5-3 6-7 7-4-1-7-3.5-7-7V7z" />
+                    <path d="M7 10l2 2 4-4" />
+                  </svg>
+                </div>
+                <div>
+                  <div style="font-size: 13px; font-weight: 500; color: #111">
+                    Voting pattern normal
+                  </div>
+                  <div style="font-size: 11px; color: #666; margin-top: 2px">
+                    No unusual surges or bot-like voting speeds detected
+                  </div>
+                </div>
+              </div>
+              <div class="fraud-item" style="border-bottom: none">
+                <div
+                  class="fraud-icon"
+                  style="background: #faeeda; color: #854f0b"
+                >
+                  <svg viewBox="0 0 20 20">
+                    <path d="M10 3l7 14H3z" />
+                    <path d="M10 9v4M10 15v.5" />
+                  </svg>
+                </div>
+                <div>
+                  <div style="font-size: 13px; font-weight: 500; color: #111">
+                    1 suspicious login attempt
+                  </div>
+                  <div style="font-size: 11px; color: #666; margin-top: 2px">
+                    Flagged: multiple login attempts from single IP in Abuja —
+                    under review
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="sec-results" class="section-hidden">
+          <div class="stats-row">
+            <div class="stat">
+              <div class="stat-num" id="res-total">0</div>
+              <div class="stat-lbl">Total votes cast</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num">36</div>
+              <div class="stat-lbl">States reporting</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num" id="res-turnout">0%</div>
+              <div class="stat-lbl">Voter turnout</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">
+              Live results — presidential election 2027
+            </div>
+            <div class="card-sub">
+              Calculated directly from blockchain. Updated in real time.
+            </div>
+            <div id="results-bars" style="margin-top: 8px"></div>
+          </div>
+          <div class="card">
+            <div class="card-title">Claude AI summary</div>
+            <div
+              id="ai-summary"
+              style="font-size: 13px; color: #555; line-height: 1.7"
+            ></div>
+          </div>
+        </div>
+
+        <div id="sec-ai" class="section-hidden">
+          <div class="card">
+            <div class="card-title">NaijaVote AI assistant</div>
+            <div class="card-sub">
+              Powered by Claude. Ask anything about the election in English,
+              Pidgin, Hausa, Yoruba, or Igbo.
+            </div>
+            <div class="quick-btns">
+              <button
+                class="qbtn"
+                onclick="askQuick('How do I register to vote?')"
+              >
+                How do I register?
+              </button>
+              <button class="qbtn" onclick="askQuick('Is my vote anonymous?')">
+                Is my vote anonymous?
+              </button>
+              <button
+                class="qbtn"
+                onclick="askQuick('How does blockchain keep my vote safe?')"
+              >
+                How does blockchain work?
+              </button>
+              <button class="qbtn" onclick="askQuick('Wetin be NaijaVote?')">
+                Wetin be NaijaVote?
+              </button>
+            </div>
+            <div class="chat-msgs" id="chat-msgs">
+              <div class="msg msg-ai">
+                Hello! I am the NaijaVote AI assistant. Ask me anything about
+                the election, how to vote, or how your vote is protected. You
+                can write in English, Pidgin, Hausa, Yoruba, or Igbo.
+              </div>
+            </div>
+            <div class="chat-input-row">
+              <input
+                id="chat-in"
+                type="text"
+                placeholder="Ask a question..."
+                onkeydown="if (event.key === 'Enter') sendChat();"
+              />
+              <button onclick="sendChat()">Send</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

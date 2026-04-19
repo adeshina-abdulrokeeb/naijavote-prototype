@@ -59,6 +59,7 @@
             document
               .getElementById("vote-locked")
               .classList.add("section-hidden");
+              
             document
               .getElementById("vote-main")
               .classList.add("section-hidden");
